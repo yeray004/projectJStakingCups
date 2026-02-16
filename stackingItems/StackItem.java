@@ -37,17 +37,17 @@ public abstract class StackItem{
     }
 
     /**
-     * Le dice al rectángulo que se muestre
+     * Le dice al objeto que se muestre
      */
     public void makeVisible(){
         shape.makeVisible();
     }
 
     /**
-     * Le dice al rectángulo que se oculte
+     * Le dice al objeto que se oculte
      */
     public void makeInvisible(){
-        shape.makeVisible();
+        shape.makeInvisible();
     }
     
     public String getId() {
