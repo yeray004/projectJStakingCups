@@ -1,176 +1,82 @@
-/**
- * Write a description of class Tower here.
- * 
- * @author Andrés Sotelo
- * @author Yeray Guachetá
- * @version 1.0
- */
-public class Tower{
-    
-    // private Cup;
-    // private Lid;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Tower {
     private int width;
     private int maxHeight;
-    private boolean ok;
-    
-    /**
-     * Constructor for objects of class Tower
-     */
-    public Tower(int width, int maxHeight){
+    private ArrayList<Integer> tazas;
+    private ArrayList<Integer> tapas;
+    private boolean ultimaOperacionExitosa;
+
+    // 1. Crear la torre
+    public Tower(int width, int maxHeight) {
         this.width = width;
         this.maxHeight = maxHeight;
+        this.tazas = new ArrayList<Integer>();
+        this.tapas = new ArrayList<Integer>();
+        this.ultimaOperacionExitosa = true;
     }
 
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void pushCup(int i){
-        
+    // 2. Adicionar o eliminar taza
+    public void pushCup(int i) {
+        if (this.height() < maxHeight) {
+            tazas.add(i);
+            ultimaOperacionExitosa = true;
+        } else {
+            ultimaOperacionExitosa = false;
+        }
     }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void popCup(){
-        
+
+    public void popCup() {
+        if (tazas.size() > 0) {
+            tazas.remove(tazas.size() - 1);
+            ultimaOperacionExitosa = true;
+        } else {
+            ultimaOperacionExitosa = false;
+        }
     }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void removeCup(int i){
-        
+
+    // 3. Adicionar o eliminar tapa
+    public void pushLid(int i) {
+        // Regla: Solo si la taza existe
+        if (tazas.contains(i)) {
+            tapas.add(i);
+            ultimaOperacionExitosa = true;
+        } else {
+            ultimaOperacionExitosa = false;
+        }
     }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void pushLid(int i){
-        
+
+    public void popLid() {
+        if (tapas.size() > 0) {
+            tapas.remove(tapas.size() - 1);
+            ultimaOperacionExitosa = true;
+        } else {
+            ultimaOperacionExitosa = false;
+        }
     }
-    
-        /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void popLid(){
-        
+
+    // 4. Ordenar de mayor a menor
+    public void orderTower() {
+        Collections.sort(tazas);
+        Collections.reverse(tazas); // Así queda de mayor a menor
+        ultimaOperacionExitosa = true;
     }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void removeLid(int i){
-        
+
+    // 5. Orden inverso
+    public void reverseTower() {
+        Collections.reverse(tazas);
+        ultimaOperacionExitosa = true;
     }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void orderTower(){
-        
+
+    // 6. Consultar altura
+    public int height() {
+        // Tazas y tapas miden 1cm
+        return tazas.size() + tapas.size();
     }
-    
-        /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void reverseTower(){
-        
-    }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int height(){
-        return 1;
-    }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int[] lidedCups(int i){
-        return new int[] { 1, 2, 3 }; //sintaxis
-    }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public String[][] stackingItems(){
-        return new String[][] {
-            {"A", "B"},
-            {"C", "D"} //sintaxis
-        };
-    }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void makeVisible(){
-        
-    }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void makeInvisible(){
-        
-    }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public void exit(){
-        
-    }
-    
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public boolean ok(){
-        return true;
+
+    // Para el método ok() del diseño
+    public boolean ok() {
+        return ultimaOperacionExitosa;
     }
 }
