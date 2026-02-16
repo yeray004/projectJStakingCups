@@ -2,32 +2,61 @@
 /**
  * Write a description of class StackItem here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Yeray Guachetá
+ * @version 1
  */
-public class StackItem
-{
-    // instance variables - replace the example below with your own
+public abstract class StackItem{
+    
+    private String id;
+    private String color;
     private int x;
+    private int y;
+    private boolean isVisible;
+    private Rectangle shape;
 
     /**
-     * Constructor for objects of class StackItem
+     * Constructor de la clase Cup
+     * @param id El identificador único de la taza
+     * @param color El color de la taza
+     * @param x Posición horizontal inicial
+     * @param y Posición vertical inicial
      */
-    public StackItem()
-    {
-        // initialise instance variables
-        x = 0;
+    public StackItem(String id, String color, int x, int y){
+        this.id = id;
+        this.color = color;
+        this.x = x;
+        this.y = y;
+        this.isVisible = false;
+        this.shape = new Rectangle();
     }
 
     /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
+     * Mueve el objeto a una nueva posición.
      */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    public void move(int newX, int newY){
+        this.x = newX;
+        this.y = newY;
     }
+
+    /**
+     * Le dice al rectángulo que se muestre
+     */
+    public void makeVisible(){
+        this.isVisible = true;
+        shape.makeVisible();
+    }
+
+    /**
+     * Le dice al rectángulo que se oculte
+     */
+    public void makeInvisible(){
+        this.isVisible = false;
+        shape.makeVisible();
+    }
+    
+    public String getId() {
+        return id;
+    }
+    
+    public abstract int getHeight();
 }

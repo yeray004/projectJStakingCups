@@ -1,30 +1,33 @@
 /**
- * Write a description of class Lid here.
+ * Clase que representa una tapa.
  * 
  * @author Andrés Sotelo
  * @author Yeray Guachetá
  * 
  * @version 1.0
  */
-public class Lid{
+public class Lid extends StackItem {
 
-    private static final int height = 1;
+    private static final int HEIGHT = 1;
 
     /**
      * Constructor for objects of class Lid
+     * @param id Identificador único de la tapa.
+     * @param color Color de la tapa.
+     * @param x Posición horizontal.
+     * @param y Posición vertical.
      */
-    public Lid(){
-        
+    public Lid(String id, String color, int x, int y){
+        super(id, color, x, y); // Línea de código implementada por Inteligencia artificial
     }
 
     /**
-     * An example of a method - replace this comment with your own
+     * Devuelve la altura de la tapa.
      * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
+     * @return La altura constante de la tapa
      */
-    public int sampleMethod(int y){
-        // put your code here
-        return y;
+    @Override
+    public int getHeight() {
+        return HEIGHT;
     }
 }
