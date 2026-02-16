@@ -102,13 +102,11 @@ public class Tower{
     }
     
     /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
+     * Devuelve la cantidad de items (tazas y tapas) en la torre.
+     * @return El número de items en la lista. 
      */
     public int height(){
-        return 1;
+        return items.size();
     }
     
     /**
@@ -135,23 +133,29 @@ public class Tower{
     }
     
     /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
+     * Hace visibles todos los elementos de la torre.
      */
     public void makeVisible(){
-        
+        int h = 0;
+        h = getTotalHeight();
+        if(h <= maxHeight){
+            for (StackItem item : items) {
+                item.makeVisible();
+            }
+            ok = true;
+        } else{
+            ok = false;
+        }
     }
     
     /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
+     * Hace invisibles todos los elementos de la torre.
      */
     public void makeInvisible(){
-        
+        for (StackItem item : items) {
+                item.makeInvisible();
+        }
+        ok= true;
     }
     
     /**

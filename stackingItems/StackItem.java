@@ -37,19 +37,21 @@ public abstract class StackItem{
     }
 
     /**
-     * Le dice al objeto que se muestre
+     * Le dice al objeto que se muestre.
      */
     public void makeVisible(){
         shape.makeVisible();
     }
 
     /**
-     * Le dice al objeto que se oculte
+     * Le dice al objeto que se oculte.
      */
     public void makeInvisible(){
         shape.makeInvisible();
     }
-    
+    /**
+     * Regresa el Id del objeto.
+     */    
     public int getId() {
         return id;
     }
