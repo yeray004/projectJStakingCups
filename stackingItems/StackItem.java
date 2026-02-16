@@ -11,7 +11,6 @@ public abstract class StackItem{
     private String color;
     private int x;
     private int y;
-    private boolean isVisible;
     private Rectangle shape;
 
     /**
@@ -26,7 +25,6 @@ public abstract class StackItem{
         this.color = color;
         this.x = x;
         this.y = y;
-        this.isVisible = false;
         this.shape = new Rectangle();
     }
 
@@ -42,7 +40,6 @@ public abstract class StackItem{
      * Le dice al rectángulo que se muestre
      */
     public void makeVisible(){
-        this.isVisible = true;
         shape.makeVisible();
     }
 
@@ -50,7 +47,6 @@ public abstract class StackItem{
      * Le dice al rectángulo que se oculte
      */
     public void makeInvisible(){
-        this.isVisible = false;
         shape.makeVisible();
     }
     
