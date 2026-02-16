@@ -17,7 +17,7 @@ public class Lid extends StackItem {
      * @param x Posición horizontal.
      * @param y Posición vertical.
      */
-    public Lid(String id, String color, int x, int y){
+    public Lid(int id, String color, int x, int y){
         super(id, color, x, y); // Línea de código implementada por Inteligencia artificial
     }
 

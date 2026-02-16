@@ -7,7 +7,7 @@
  */
 public abstract class StackItem{
     
-    private String id;
+    private int id;
     private String color;
     private int x;
     private int y;
@@ -20,7 +20,7 @@ public abstract class StackItem{
      * @param x Posición horizontal inicial
      * @param y Posición vertical inicial
      */
-    public StackItem(String id, String color, int x, int y){
+    public StackItem(int id, String color, int x, int y){
         this.id = id;
         this.color = color;
         this.x = x;
@@ -50,7 +50,7 @@ public abstract class StackItem{
         shape.makeInvisible();
     }
     
-    public String getId() {
+    public int getId() {
         return id;
     }
     

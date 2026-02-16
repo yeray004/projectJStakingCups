@@ -1,14 +1,14 @@
+import java.util.ArrayList;
+import java.util.Collections;
 /**
- * Write a description of class Tower here.
+ * Clase principal que gestiona la torre de tazas y tapas.
  * 
  * @author Andrés Sotelo
  * @author Yeray Guachetá
  * @version 1.0
  */
 public class Tower{
-    
-    // private Cup;
-    // private Lid;
+    private ArrayList<StackItem> items;
     private int width;
     private int maxHeight;
     private boolean ok;
@@ -130,7 +130,7 @@ public class Tower{
     public String[][] stackingItems(){
         return new String[][] {
             {"A", "B"},
-            {"C", "D"} //sintaxis
+            {"C", "D"} //sintaxis de ejemplo
         };
     }
     
@@ -171,6 +171,57 @@ public class Tower{
      * @return     the sum of x and y 
      */
     public boolean ok(){
-        return true;
+        return this.ok;
+    }
+    
+    /**
+     * Calcula la altura total actual de la torre sumando los items.
+     * @return La suma de las alturas.
+     */
+    private int getTotalHeight() {
+        int total = 0;
+        for (StackItem item : items) {
+            total += item.getHeight();
+        }
+        return total;
+    }
+
+    /**
+     * Verifica si un identificador ya existe en la lista.
+     * @param id El identificador a buscar.
+     * @return true si ya existe, false si no.
+     */
+    private boolean idExist(int id) {
+        return findItem(id) != null;
+    }
+
+    /**
+     * Busca un objeto específico en la torre dado su Id.
+     * @param id El identificador que se buca.
+     * @return El objeto StackItem si lo encuentra, o null si no.
+     */
+    private StackItem findItem(int id) {
+        for (StackItem item : items) {
+            if (item.getId() == id){
+                return item;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Reorganiza visualmente la torre. ()
+     * Recalcula las posiciones (x, y) de cada elemento para que queden apilados.
+     */
+    private void refreshTower() {
+        int y = 0;
+        int x = this.width / 2; //calcula el centro del tablero
+        for (StackItem item : items) {
+            item.makeInvisible();
+            item.move(x, y);
+            item.makeVisible();
+            
+            y += item.getHeight();
+        }
     }
 }

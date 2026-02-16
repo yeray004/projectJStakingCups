@@ -18,7 +18,7 @@ public class Cup extends StackItem{
      * @param y Posición Y.
      * @param height Altura específica de la taza.
      */
-    public Cup(String id, String color, int x, int y, int height) {
+    public Cup(int id, String color, int x, int y, int height) {
         super(id, color, x, y); // Línea de código implementada por Inteligencia artificial
         this.height = height;
     }
