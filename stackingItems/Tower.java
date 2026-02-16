@@ -5,7 +5,7 @@
  * @author Yeray Guachetá
  * @version 1.0
  */
-public class Towe{
+public class Tower{
     
     // private Cup;
     // private Lid;
@@ -16,7 +16,7 @@ public class Towe{
     /**
      * Constructor for objects of class Tower
      */
-    public Towe(int width, int maxHeight){
+    public Tower(int width, int maxHeight){
         this.width = width;
         this.maxHeight = maxHeight;
     }
