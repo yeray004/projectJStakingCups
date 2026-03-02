@@ -1,4 +1,4 @@
-
+import java.util.*;
 /**
  * Write a description of class StackItem here.
  * 
@@ -8,10 +8,11 @@
 public abstract class StackItem{
     
     private int id;
-    private String color;
     private int x;
     private int y;
-    private Rectangle shape;
+    private int partnerId;
+    private String color;
+    public ArrayList<Rectangle> shapes;
 
     /**
      * Constructor de la clase Cup
@@ -22,16 +23,23 @@ public abstract class StackItem{
      */
     public StackItem(int id, String color, int x, int y){
         this.id = id;
-        this.color = color;
         this.x = x;
         this.y = y;
-        this.shape = new Rectangle();
+        this.partnerId=-1;
+        this.shapes = new ArrayList<>();
+        this.color= color;
     }
 
     /**
      * Mueve el objeto a una nueva posición.
      */
     public void move(int newX, int newY){
+        int deltaX = newX - this.x;
+        int deltaY = newY - this.y;
+        for (Rectangle s: shapes){
+            s.moveHorizontal(deltaX);
+            s.moveVertical(deltaY);
+        }
         this.x = newX;
         this.y = newY;
     }
@@ -40,14 +48,18 @@ public abstract class StackItem{
      * Le dice al objeto que se muestre.
      */
     public void makeVisible(){
-        shape.makeVisible();
+        for(Rectangle s : shapes){
+            s.makeVisible();
+        }
     }
 
     /**
      * Le dice al objeto que se oculte.
      */
     public void makeInvisible(){
-        shape.makeInvisible();
+        for(Rectangle s : shapes){
+            s.makeInvisible();
+        }
     }
     /**
      * Regresa el Id del objeto.
@@ -56,5 +68,20 @@ public abstract class StackItem{
         return id;
     }
     
-    public abstract int getHeight();
+    public abstract int getSize();
+    
+    public int getY(){
+        return y;
+    }
+    
+    public void setPartnerId(int id){
+        this.partnerId = id;
+    }
+    
+    public int getPartnerId() { 
+        return this.partnerId;
+    }
+    public String getColor(){
+        return this.color;
+    }
 }

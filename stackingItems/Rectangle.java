@@ -25,9 +25,9 @@ public class Rectangle{
      */
     public Rectangle(){
         height = 30;
-        width = 40;
-        xPosition = 70;
-        yPosition = 15;
+        width = 30;
+        xPosition = 0;
+        yPosition = 0;
         color = "magenta";
         isVisible = false;
     }
