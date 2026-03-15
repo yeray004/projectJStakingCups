@@ -4,11 +4,12 @@ import java.util.*;
  * 
  * @author Yeray Guachetá
  * @author Andrés Sotelo
- * @version 1
+ * @version 4
  */
 public abstract class StackItem{
     public static final int UNIT = 30;
     public static final int NO_PARTNER = -1;
+    private final int NUMBER;
     
     private int id;
     private int x;
@@ -24,8 +25,9 @@ public abstract class StackItem{
      * @param x Posición horizontal inicial
      * @param y Posición vertical inicial
      */
-    public StackItem(int id, String color, int x, int y){
+    public StackItem(int id, int NUMBER, String color, int x, int y){
         this.id = id;
+        this.NUMBER = NUMBER;
         this.color= color;
         this.x = x;
         this.y = y;
@@ -89,7 +91,7 @@ public abstract class StackItem{
                 return candidate.getSealY();
             }
 
-            if (candidate.canContain(this)) {
+            if (candidate.canContain(this) && !isClosedCupBefore(items, i, index)) {
                 container = candidate;
                 innerTop = candidate.getInnerFloorY();
 
@@ -109,10 +111,35 @@ public abstract class StackItem{
 
         return towerTop;
     }
+    
     /**
-     * Busca una pareja válida para el item.
-     * Las tazas no buscan pareja; las tapas sí.
+     * Indica si una taza ya quedó cerrada por una tapa antes del objeto actual. Si ya existe una tapa del mismo
+     * número entre la taza y el objeto actual, esa taza no debe seguir recibiendo nuevos objetos dentro.
      *
+     * @param items elementos actuales de la torre.
+     * @param cupIndex posición de la taza candidata.
+     * @param currentIndex posición del objeto que se está ubicando.
+     * @return true si la taza ya está cerrada antes del objeto actual.
+     */
+    private boolean isClosedCupBefore(List<StackItem> items, int cupIndex, int currentIndex) {
+        StackItem cup = items.get(cupIndex);
+    
+        if (!cup.isCup()) {
+            return false;
+        }
+    
+        for (int i = cupIndex + 1; i < currentIndex; i++) {
+            StackItem item = items.get(i);
+            if (item.isLid() && item.getNumber() == cup.getNumber()) {
+                return true;
+            }
+        }
+    
+        return false;
+    }
+     
+    /**
+     * Busca una pareja válida para el item. Las tazas no buscan pareja; las tapas sí.
      * @param items elementos de la torre.
      * @return pareja encontrada o null si no existe.
      */
@@ -122,7 +149,6 @@ public abstract class StackItem{
 
     /**
      * Indica si este objeto puede contener a otro.
-     *
      * @param other elemento candidato a quedar dentro.
      * @return true si puede contenerlo.
      */
@@ -132,7 +158,6 @@ public abstract class StackItem{
 
     /**
      * Indica si este objeto puede sellar a otro.
-     *
      * @param other elemento candidato a quedar tapado.
      * @return true si puede sellarlo.
      */
@@ -142,7 +167,6 @@ public abstract class StackItem{
 
     /**
      * Indica si este objeto cabe dentro de una taza dada.
-     *
      * @param cup taza contenedora.
      * @return true si cabe dentro de la taza.
      */
@@ -152,7 +176,6 @@ public abstract class StackItem{
 
     /**
      * Indica si este objeto puede ser sellado por una tapa.
-     *
      * @param lid tapa candidata.
      * @return true si puede ser sellado.
      */
@@ -195,12 +218,12 @@ public abstract class StackItem{
 
     /**
      * Indica si este item entra en conflicto con otro al intentar agregarlo.
-     * Dos items entran en conflicto si son del mismo tipo y tienen el mismo tamaño.
+     * Dos items entran en conflicto si son del mismo tipo y tienen el mismo número.
      * @param other item a evaluar.
      * @return true si no pueden coexistir en la torre.
      */
     public boolean conflictsWith(StackItem other) {
-        return hasSameTypeAs(other) && getSize() == other.getSize();
+        return hasSameTypeAs(other) && NUMBER == other.getNumber();
     }
 
     /**
@@ -275,6 +298,14 @@ public abstract class StackItem{
     public int getInnerFloorY() {
         return y;
     }
+    
+    /**
+     * Retorna el número de la figura.
+     * @return número del objeto.
+     */
+    public int getNumber() {
+        return NUMBER;
+    }
 
     /**
      * Actualiza el identificador de la pareja del objeto.
@@ -305,5 +336,17 @@ public abstract class StackItem{
      */
     public int getPartnerId() {
         return partnerId;
+    }
+    
+    //CICLO 2
+    /**
+     * Cambia el color del objeto.
+     * @param newColor nuevo color del objeto.
+     */
+    public void changeColor(String newColor) {
+        color = newColor;
+        for (Rectangle shape : shapes) {
+            shape.changeColor(newColor);
+        }
     }
 }

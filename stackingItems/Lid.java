@@ -21,8 +21,8 @@ public class Lid extends StackItem {
      * @param x Posición horizontal.
      * @param y Posición vertical.
      */
-    public Lid(int id, String color, int x, int y, int size){
-        super(id, color, x, y); // Línea de código implementada por Inteligencia artificial
+    public Lid(int id, int NUMBER, String color, int x, int y, int size){
+        super(id, NUMBER, color, x, y); // Línea de código implementada por Inteligencia artificial
         this.size = size;
         
         Rectangle lid = new Rectangle();
@@ -35,7 +35,6 @@ public class Lid extends StackItem {
 
     /**
      * Indica si esta tapa puede sellar a otro objeto.
-     *
      * @param other elemento candidato a sellar.
      * @return true si el otro elemento puede ser sellado por esta tapa.
      */
@@ -46,7 +45,6 @@ public class Lid extends StackItem {
 
     /**
      * Busca la taza que esta tapa está sellando.
-     *
      * @param items elementos de la torre.
      * @return taza asociada o null si no existe.
      */
@@ -62,7 +60,6 @@ public class Lid extends StackItem {
 
     /**
      * Indica si el item corresponde al tipo tapa.
-     *
      * @return true siempre para una tapa.
      */
     @Override
@@ -72,7 +69,6 @@ public class Lid extends StackItem {
 
     /**
      * Devuelve la prioridad usada al ordenar elementos del mismo tamaño.
-     *
      * @return prioridad de orden de la tapa.
      */
     @Override
@@ -82,7 +78,6 @@ public class Lid extends StackItem {
 
     /**
      * Devuelve el tipo del elemento.
-     *
      * @return tipo lid.
      */
     @Override
@@ -92,7 +87,6 @@ public class Lid extends StackItem {
 
     /**
      * Devuelve la altura lógica del objeto en unidades.
-     *
      * @return altura lógica de la tapa.
      */
     @Override
@@ -102,7 +96,6 @@ public class Lid extends StackItem {
 
     /**
      * Regresa el tamaño de la tapa.
-     *
      * @return tamaño de la tapa.
      */
     @Override

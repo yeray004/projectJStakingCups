@@ -24,7 +24,9 @@ public class Tower{
     private int colorIndex;
     
     /**
-     * Constructor for objects of class Tower
+     * Constructor general de la clase Tower.
+     * @param width ancho de la torre
+     * @param maxHeight altura máxima
      */ 
     public Tower(int width, int maxHeight){
         this.width = width;
@@ -36,6 +38,30 @@ public class Tower{
         topPixel = FLOOR_Y;
         colorIndex = 0;
     }
+    /**
+     * Construye una torre inicial con la cantidad de tazas indicada.
+     * Las tazas se crean sin tapas y con tamaños impares crecientes.
+     * @param cups cantidad de tazas que tendrá la torre inicial.
+     */
+    public Tower(int cups) {
+        this(800, cups <= 0 ? 1 : (2 * cups) - 1); //ternario que cumple el condicional del ejercicio
+    
+        int centerX = width / 2;
+    
+        for (int number = cups; number >= 1; number--) {
+            int size = (2 * number) - 1;
+            String color = CUP_COLORS[colorIndex % CUP_COLORS.length];
+    
+            StackItem newCup = new Cup(idCounter, number, color, centerX, FLOOR_Y, size);
+            items.add(newCup);
+    
+            idCounter++;
+            colorIndex++;
+        }
+    
+        refreshTower();
+        ok = true;
+    }
 
     /**
      * Añade un nuevo elemento de tipo taza a la torre con su tamaño.
@@ -44,7 +70,7 @@ public class Tower{
     public void pushCup(int i) {
         int centerX = width / 2;
         String color = CUP_COLORS[colorIndex % CUP_COLORS.length];
-        StackItem newCup = new Cup(idCounter, color, centerX, FLOOR_Y, i);
+        StackItem newCup = new Cup(idCounter, i, color, centerX, FLOOR_Y, i);
 
         if (!canAdd(newCup)) {
             ok = false;
@@ -102,7 +128,7 @@ public class Tower{
      */
     public void pushLid(int i){
         int centerX = width / 2;
-        StackItem newLid = new Lid(idCounter, findColorForLid(i), centerX, FLOOR_Y, i);
+        StackItem newLid = new Lid(idCounter, i, findColorForLid(i), centerX, FLOOR_Y, i);
 
         if (!canAdd(newLid)) {
             ok = false;
@@ -175,6 +201,66 @@ public class Tower{
     }
     
     /**
+     * Intercambia la posición de dos objetos de la torre
+     * identificados por su tipo y número lógico.
+     * @param o1 datos del primer objeto.
+     * @param o2 datos del segundo objeto.
+     */
+    public void swap(String[] o1, String[] o2) {
+        StackItem firstItem = findItem(o1);
+        StackItem secondItem = findItem(o2);
+    
+        if (firstItem == null || secondItem == null || firstItem == secondItem) {
+            ok = false;
+        }
+    
+        int firstIndex = items.indexOf(firstItem);
+        int secondIndex = items.indexOf(secondItem);
+        
+        if (firstIndex == -1 || secondIndex == -1) {
+            ok = false;
+            return;
+        }
+        
+        swapItems(firstIndex,secondIndex);
+        refreshTower();
+        ok = true;
+    }
+    
+    /**
+     * Reorganiza la torre para dejar cada taza seguida por su tapa cuando ambas existan dentro de la estructura.
+     */
+    public void cover() {
+        ArrayList<StackItem> coveredItems = new ArrayList<>();
+        ArrayList<StackItem> remainingItems = new ArrayList<>(items);
+        boolean coveredAnyCup = false;
+    
+        for (StackItem item : items) {
+            if (item.isCup()) {
+                coveredItems.add(item);
+                remainingItems.remove(item);
+    
+                StackItem lid = findAvailableLid(item.getNumber(), remainingItems);
+                if (lid != null) {
+                    coveredItems.add(lid);
+                    remainingItems.remove(lid);
+                    coveredAnyCup = true;
+                }
+            }
+        }
+    
+        if (!coveredAnyCup) {
+            ok = false;
+            return;
+        }
+    
+        coveredItems.addAll(remainingItems);
+        items = coveredItems;
+        refreshTower();
+        ok = true;
+    }
+    
+    /**
      * Calcula la altura total actual de la torre sumando los items.
      * @return La suma de las alturas.
      */
@@ -183,23 +269,23 @@ public class Tower{
     }
     
     /**
-     * Retorna los tamaños de todas las tazas que tienen una tapa.
+     * Retorna los números de todas las tazas que tienen una tapa.
      * @return Arreglo de enteros con los IDs de las tazas selladas.
      */
     public int[] lidedCups(){
-        ArrayList<Integer> sealedCupSizes = new ArrayList<>();
+        ArrayList<Integer> sealedCupNumbers = new ArrayList<>();
 
         for (StackItem item : items) {
             if (item.isSealedCup()) {
-                sealedCupSizes.add(item.getSize());
+                sealedCupNumbers.add(item.getNumber());
             }
         }
 
-        Collections.sort(sealedCupSizes);
-        int[] result = new int[sealedCupSizes.size()];
+        Collections.sort(sealedCupNumbers);
+        int[] result = new int[sealedCupNumbers.size()];
 
-        for (int i = 0; i < sealedCupSizes.size(); i++) {
-            result[i] = sealedCupSizes.get(i);
+        for (int i = 0; i < sealedCupNumbers.size(); i++) {
+            result[i] = sealedCupNumbers.get(i);
         }
 
         return result;
@@ -214,9 +300,49 @@ public class Tower{
         for (int i = 0; i < items.size(); i++) {
             StackItem item = items.get(i);
             matrix[i][0] = item.getTypeName();
-            matrix[i][1] = String.valueOf(item.getSize());
+            matrix[i][1] = String.valueOf(item.getNumber());
         }
         return matrix;
+    }
+    
+    /**
+     * Consulta un intercambio de dos objetos que reduzca la altura actual de la torre sin modificar su estado final.
+     * @return una matriz con los datos de los dos objetos a intercambiar,o una matriz vacía si no existe un intercambio que reduzca la altura.
+     */
+    public String[][] swapToReduce() {
+        int currentHeight = height();
+        int bestHeight = currentHeight;
+        String[][] bestSwap = new String[0][0];
+        
+        if (items.size() < 2) {
+            ok = false;
+            return bestSwap;
+        }
+    
+        for (int i = 0; i < items.size() - 1; i++) {
+            for (int j = i + 1; j < items.size(); j++) {
+                StackItem firstItem = items.get(i);
+                StackItem secondItem = items.get(j);
+    
+                swapItems(i, j);
+                refreshTower();
+    
+                int newHeight = height();
+                if (newHeight < bestHeight) {
+                    bestHeight = newHeight;
+                    bestSwap = new String[][]{
+                        itemData(firstItem),
+                        itemData(secondItem)
+                    };
+                }
+    
+                swapItems(i, j);
+                refreshTower();
+            }
+        }
+    
+        ok = bestSwap.length != 0;
+        return bestSwap;
     }
     
     /**
@@ -267,10 +393,10 @@ public class Tower{
         }
         return ok;
     }
-    
+    //Sobrecarga de findItem
     /**
      * Busca un objeto específico en la torre dado su Id.
-     * @param id El identificador que se buca.
+     * @param id El identificador que se busca.
      * @return El objeto StackItem si lo encuentra, o null si no.
      */
     private StackItem findItem(int id) {
@@ -281,6 +407,40 @@ public class Tower{
         }
         return null;
     }
+    /**
+     * Busca un objeto específico en la torre dado su Id y número.
+     * @param id El tipo de objeto que busca.
+     * @param number El número busca.
+     * @return El objeto StackItem si lo encuentra, o null si no.
+     */
+    private StackItem findItem(String type, int number) {
+        for (StackItem item : items) {
+            if (item.getTypeName().equals(type) && item.getNumber() == number) {
+                return item;
+            }
+        }
+        return null;
+    }
+    /**
+     * Busca por un arreglo String[] que después se descompone en tipo + número.
+     * @param data recibe un arreglo de texto con dos valores.
+     * @return El objeto StackItem si lo encuentra, o null si no.
+     */
+    private StackItem findItem(String[] data) {
+        if (data == null || data.length != 2) {
+            return null;
+        }
+    
+        int number;
+        try {
+            number = Integer.parseInt(data[1]);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    
+        return findItem(data[0], number);
+    }
+
 
     /**
      * Reorganiza visualmente la torre.
@@ -313,12 +473,18 @@ public class Tower{
      * Analiza la torre buscando piezas que deban unificarse.
      */
     private void updatePartnerships() {
-        for (StackItem item : items) {
-            if (!item.hasPartner()) {
-                StackItem partner = item.findPartner(items);
-                if (partner != null && !partner.hasPartner()) {
-                    item.setPartnerId(partner.getId());
-                    partner.setPartnerId(item.getId());
+        for (StackItem lid : items) {
+            if (lid.isLid() && lid.getPartnerId() == -1) {
+                for (StackItem cup : items) {
+                    if (cup.isCup() && cup.getPartnerId() == -1 && lid.getNumber() == cup.getNumber()) {
+                        int rimY = cup.getY() - (cup.getSize() * StackItem.UNIT);
+                        if (lid.getY() == rimY) {
+                            lid.setPartnerId(cup.getId());
+                            cup.setPartnerId(lid.getId());
+                            lid.changeColor(cup.getColor());
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -364,10 +530,10 @@ public class Tower{
      * @param size tamaño de la tapa.
      * @return color que debe usar la tapa.
      */
-    private String findColorForLid(int size) {
+    private String findColorForLid(int number) {
         for (int i = items.size() - 1; i >= 0; i--) {
             StackItem item = items.get(i);
-            if (item.isCup() && item.getSize() == size) {
+            if (item.isCup() && item.getNumber() == number) {
                 return item.getColor();
             }
         }
@@ -579,5 +745,43 @@ public class Tower{
         for (StackItem item : items) {
             item.makeInvisible();
         }
+    }
+    // Ciclo 2
+    /**
+     * Busca una tapa disponible con el número indicado dentro de una lista de candidatos.
+     * @param number número "lógico" que debe tener la tapa.
+     * @param candidates lista de objetos donde se realizará la búsqueda.
+     * @return la tapa encontrada o null si no existe.
+     */
+    private StackItem findAvailableLid(int number, ArrayList<StackItem> candidates) {
+        for (StackItem item : candidates) {
+            if (item.isLid() && item.getNumber() == number) {
+                return item;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Intercambia dos objetos dentro de la lista interna de la torre.
+     * @param o1 posición del primer objeto.
+     * @param o2 posición del segundo objeto.
+     */
+    private void swapItems(int o1, int o2) {
+        StackItem temporary = items.get(o1);
+        items.set(o1, items.get(o2));
+        items.set(o2, temporary);
+    }
+    
+    /**
+     * Construye la referencia pública de un objeto usando su tipo y número.
+     * @param item objeto del cual se obtendrán los datos.
+     * @return arreglo con el tipo y el número del objeto.
+     */
+    private String[] itemData(StackItem item) {
+        return new String[]{
+            item.getTypeName(),
+            String.valueOf(item.getNumber())
+        };
     }
 } 

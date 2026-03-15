@@ -12,7 +12,7 @@ public class Cup extends StackItem{
     private static final String TYPE_NAME = "cup";
 
     private final int size;
-
+    
     /**
      * Construye una taza.
      * @param id Identificador.
@@ -21,8 +21,8 @@ public class Cup extends StackItem{
      * @param y Posición Y.
      * @param height Altura específica de la taza.
      */
-    public Cup(int id, String color, int x, int y, int size) {
-        super(id, color, x, y); // Línea de código implementada por Inteligencia artificial
+    public Cup(int id, int NUMBER, String color, int x, int y, int size) {
+        super(id, NUMBER, color, x, y); // Línea de código implementada por Inteligencia artificial
         this.size = size;
         
         if (size ==1){
@@ -140,4 +140,6 @@ public class Cup extends StackItem{
     public int getSize() {
         return size;
     }
+    
+    //CICLO 2
 }

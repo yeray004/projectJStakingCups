@@ -18,10 +18,10 @@ public class StackItemTest {
 
     @BeforeEach
     public void setUp() {
-        bigCup = new Cup(1, "blue", 400, 600, 5);
-        smallCup = new Cup(2, "green", 400, 600, 3);
-        sameSizeLid = new Lid(3, "blue", 400, 600, 5);
-        smallLid = new Lid(4, "green", 400, 600, 3);
+        bigCup = new Cup(1, 5, "blue", 400, 600, 5);
+        smallCup = new Cup(2, 3, "green", 400, 600, 3);
+        sameSizeLid = new Lid(3, 5, "blue", 400, 600, 5);
+        smallLid = new Lid(4, 3, "green", 400, 600, 3);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class StackItemTest {
 
     @Test
     public void shouldDetectConflictOnlyWhenTypeAndSizeAreEqual() {
-        Cup anotherCupWithSameSize = new Cup(5, "red", 400, 600, 5);
+        Cup anotherCupWithSameSize = new Cup(5, 5, "red", 400, 600, 5);
 
         assertTrue(bigCup.conflictsWith(anotherCupWithSameSize));
         assertFalse(bigCup.conflictsWith(sameSizeLid));
@@ -146,14 +146,14 @@ public class StackItemTest {
 
     @Test
     public void shouldCalculateSealYWhenLidMatchesCup() {
-        Lid sealingLid = new Lid(5, "blue", 400, 600, 5);
+        Lid sealingLid = new Lid(5, 5, "blue", 400, 600, 5);
 
         assertEquals(450, sealingLid.calculateY(List.of(bigCup, sealingLid), 1, 450, 600));
     }
 
     @Test
     public void shouldFindPartnerForLidWhenItIsPlacedAtSealY() {
-        Lid sealingLid = new Lid(5, "blue", 400, bigCup.getSealY(), 5);
+        Lid sealingLid = new Lid(5, 5, "blue", 400, bigCup.getSealY(), 5);
 
         assertSame(bigCup, sealingLid.findPartner(List.of(bigCup, sealingLid)));
     }

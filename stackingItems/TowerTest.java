@@ -2,6 +2,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
+/**
+ * The test class TowerTest.
+ *
+ * @author Yeray Guachetá
+ * @author Andrés Sotelo
+ * @version 2
+ */
 public class TowerTest {
     private Tower tower;
 
