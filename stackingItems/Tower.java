@@ -1,22 +1,27 @@
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import javax.swing.JOptionPane;
+
 /**
  * Clase principal que gestiona la torre de tazas y tapas.
  * 
  * @author Andrés Sotelo
  * @author Yeray Guachetá
- * @version 1.0
+ * @support Assisted by Gemini (Google AI) - March 2026
+ * @version 4.0
  */
 public class Tower{
+    private static final int FLOOR_Y = 600;
+    private static final String DEFAULT_LID_COLOR = "red";
+    private static final String[] CUP_COLORS = {"blue", "green", "yellow", "magenta", "red", "black"};
+    
     private ArrayList<StackItem> items;
     private int width;
     private int maxHeight;
     private boolean ok;
-    private int idCounter = 1;
-    private int topPixel = 600;
-    private String[] cupColors = {"blue", "green", "yellow", "orange", "magenta", "CYAN"};
-    private int colorIndex = 0;
+    private boolean visible;
+    private int idCounter;
+    private int topPixel;
+    private int colorIndex;
     
     /**
      * Constructor for objects of class Tower
@@ -24,56 +29,54 @@ public class Tower{
     public Tower(int width, int maxHeight){
         this.width = width;
         this.maxHeight = maxHeight;
-        this.items = new ArrayList<>();
+        items = new ArrayList<>();
+        ok = true;
+        visible = false;
+        idCounter = 1;
+        topPixel = FLOOR_Y;
+        colorIndex = 0;
     }
 
     /**
      * Añade un nuevo elemento de tipo taza a la torre con su tamaño.
      * @param i tamaño del objeto.
      */
-    public void pushCup(int i){
-        int centerX = this.width / 2;
-        int floorY = 600;
-        int id = this.idCounter++;
-        
-        String color = cupColors[colorIndex % cupColors.length];
-        colorIndex++;
-        
-        Cup newCup = new Cup(id, color, centerX, floorY, i);
+    public void pushCup(int i) {
+        int centerX = width / 2;
+        String color = CUP_COLORS[colorIndex % CUP_COLORS.length];
+        StackItem newCup = new Cup(idCounter, color, centerX, FLOOR_Y, i);
+
+        if (!canAdd(newCup)) {
+            ok = false;
+            return;
+        }
+
         items.add(newCup);
+        idCounter++;
+        colorIndex++;
 
         refreshTower();
-        this.ok = true;
+        ok = true;
     }
     
     /**
      * Elimina el último elemento de tipo taza de la torre.
      */
     public void popCup(){
-        int index = items.size() - 1;
-        StackItem lastItem = items.get(index);
-        
         if (items.isEmpty()) {
-            this.ok = false;
+            ok = false;
+            return;
         }
-
-        if (lastItem instanceof Cup) {
-            int pId = lastItem.getPartnerId();
-            lastItem.makeInvisible();
-            items.remove(index);
-            
-            if (pId != -1) {
-                StackItem partner = findItem(pId);
-                if (partner != null) {
-                    partner.makeInvisible();
-                    items.remove(partner);
-                }
-            }
-            refreshTower();
-            this.ok = true;
-        } else {
-            this.ok = false;
+        StackItem lastItem = items.get(items.size() - 1);
+    
+        if (!lastItem.isCup()) {
+            ok = false;
+            return;
         }
+    
+        removeItemAndPartner(lastItem);
+        refreshTower();
+        ok = true;
     }
     
     /**
@@ -82,25 +85,15 @@ public class Tower{
      */
     public void removeCup(int i){
         StackItem item = findItem(i);
-        
-        if (item != null && item instanceof Cup) {
-            item.makeInvisible();
-            items.remove(item);
-            int pId = item.getPartnerId();
-            
-            if (pId != -1) {
-                StackItem partner = findItem(pId);
-                if (partner != null) {
-                    partner.makeInvisible();
-                    items.remove(partner);
-                }
-            }
-            
-            refreshTower();
-            this.ok = true;
-        } else {
-            this.ok = false;
+
+        if (item == null || !(item instanceof Cup)) {
+            ok = false;
+            return;
         }
+    
+        removeItemAndPartner(item);
+        refreshTower();
+        ok = true;
     }
     
     /**
@@ -108,55 +101,39 @@ public class Tower{
      * @param i tamaño del objeto.
      */
     public void pushLid(int i){
-        int centerX = this.width / 2;
-        int floorY = 600;
-        int id = this.idCounter++;
+        int centerX = width / 2;
+        StackItem newLid = new Lid(idCounter, findColorForLid(i), centerX, FLOOR_Y, i);
 
-        String color = "red";
-        
-        for (int j = items.size() - 1; j >= 0; j--) {
-            StackItem searchItem = items.get(j);
-            if (searchItem instanceof Cup && searchItem.getSize() == i) {
-                color = searchItem.getColor(); 
-                break;
-            }
+        if (!canAdd(newLid)) {
+            ok = false;
+            return;
         }
-        
-        Lid nuevaTapa = new Lid(id, color, centerX, floorY, i);
-        items.add(nuevaTapa);
+
+        items.add(newLid);
+        idCounter++;
 
         refreshTower();
-        this.ok = true;
+        ok = true;
     }
     
     /**
      * Elimina el último elemento de tipo tapa de la torre.
      */
     public void popLid(){
-        int index = items.size() - 1;
-        StackItem lastItem = items.get(index);
-        
         if (items.isEmpty()) {
-            this.ok = false;
+            ok = false;
+            return;
         }
-
-        if (lastItem instanceof Lid) {
-            int pId = lastItem.getPartnerId();
-            lastItem.makeInvisible();
-            items.remove(index);
-            
-            if (pId != -1) {
-                StackItem partner = findItem(pId);
-                if (partner != null) {
-                    partner.makeInvisible();
-                    items.remove(partner);
-                }
-            }
-            refreshTower();
-            this.ok = true;
-        } else {
-            this.ok = false;
+        StackItem lastItem = items.get(items.size() - 1);
+    
+        if (!lastItem.isLid()) {
+            ok = false;
+            return;
         }
+    
+        removeItemAndPartner(lastItem);
+        refreshTower();
+        ok = true;
     }
     
     /**
@@ -165,45 +142,36 @@ public class Tower{
      */
     public void removeLid(int i){
         StackItem item = findItem(i);
-        
-        if (item != null && item instanceof Lid) {
-            item.makeInvisible();
-            items.remove(item);
-            int pId = item.getPartnerId();
-            
-            if (pId != -1) {
-                StackItem partner = findItem(pId);
-                if (partner != null) {
-                    partner.makeInvisible();
-                    items.remove(partner);
-                }
-            }
-            
-            refreshTower();
-            this.ok = true;
-        } else {
-            this.ok = false;
-        }
 
+        if (item == null || !item.isLid()) {
+            ok = false;
+            return;
+        }
+    
+        removeItemAndPartner(item);
+        refreshTower();
+        ok = true;
     }
     
     /**
-     * Ordena los elemento de la torre
-     */
+     * Ordena los elemento de la torre de mayor a menor. Solo deja en la torre los elementos que caben.
+     */ // Método modificado con ayuda de inteligencia artificial
     public void orderTower(){
-        // Línea de código implementada con Inteligencia artificial
-        Collections.sort(items, (a, b) -> Integer.compare(b.getSize(), a.getSize()));
-        refreshTower();
-        this.ok = true;
+        ArrayList<ArrayList<StackItem>> groups = buildMoveGroups();
+        groups.sort(Comparator
+            .comparingInt(this::getGroupSize)
+            .reversed()
+            .thenComparingInt(this::getGroupPriority));
+        reorganizeGroups(groups);
     }
     
     /**
      * Invierte los elementos de la torre
-     */
+     */ // Método modificado con ayuda de inteligencia artificial
     public void reverseTower(){
-        Collections.reverse(items);
-        refreshTower();
-        this.ok = true;
+        ArrayList<ArrayList<StackItem>> groups = buildMoveGroups();
+        Collections.reverse(groups);
+        reorganizeGroups(groups);
     }
     
     /**
@@ -211,26 +179,30 @@ public class Tower{
      * @return La suma de las alturas.
      */
     public int height(){
-        return (600 - this.topPixel) / 30;
+        return (FLOOR_Y - topPixel) / StackItem.UNIT;
     }
     
     /**
-     * Retorna los identificadores de todas las tazas que tienen una tapa.
+     * Retorna los tamaños de todas las tazas que tienen una tapa.
      * @return Arreglo de enteros con los IDs de las tazas selladas.
      */
     public int[] lidedCups(){
-        ArrayList<Integer> unified = new ArrayList<>();
+        ArrayList<Integer> sealedCupSizes = new ArrayList<>();
+
         for (StackItem item : items) {
-            if (item instanceof Cup && item.getPartnerId() != -1) {
-                unified.add(item.getId());
+            if (item.isSealedCup()) {
+                sealedCupSizes.add(item.getSize());
             }
         }
-        //Vec de int
-        int[] res = new int[unified.size()];
-        for (int i = 0; i < unified.size(); i++) {
-            res[i] = unified.get(i);
+
+        Collections.sort(sealedCupSizes);
+        int[] result = new int[sealedCupSizes.size()];
+
+        for (int i = 0; i < sealedCupSizes.size(); i++) {
+            result[i] = sealedCupSizes.get(i);
         }
-        return res;
+
+        return result;
     }
     
     /**
@@ -241,7 +213,7 @@ public class Tower{
         String[][] matrix = new String[items.size()][2];
         for (int i = 0; i < items.size(); i++) {
             StackItem item = items.get(i);
-            matrix[i][0] = (item instanceof Cup) ? "Cup" : "Lid"; //ternario añadido
+            matrix[i][0] = item.getTypeName();
             matrix[i][1] = String.valueOf(item.getSize());
         }
         return matrix;
@@ -251,20 +223,26 @@ public class Tower{
      * Hace visibles todos los elementos de la torre.
      */
     public void makeVisible(){
-        for (StackItem item : items) {
-                item.makeVisible();
+        hideAllItems();
+
+        if (!fitsInTower(new ArrayList<>(items))) {
+            visible = false;
+            ok = false;
+            return;
         }
-        ok= true;
+
+        visible = true;
+        refreshTower();
+        ok = true;
     }
     
     /**
      * Hace invisibles todos los elementos de la torre.
      */
     public void makeInvisible(){
-        for (StackItem item : items) {
-                item.makeInvisible();
-        }
-        ok= true;
+        hideAllItems();
+        visible = false;
+        ok = true;
     }
     
     /**
@@ -278,23 +256,18 @@ public class Tower{
      * Verifica si la acción ejecutada fue exitosa o no.
      */
     public boolean ok(){
-        if (this.ok) {
-            JOptionPane.showMessageDialog(null, "Operación realizada con éxito.");
-        } else {
-            JOptionPane.showMessageDialog(null, "La operación no pudo completarse.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        if (visible) { //Condición para los tests
+            if (ok) {
+                JOptionPane.showMessageDialog(null, "Operación realizada con éxito.");
+            } else {
+                JOptionPane.showMessageDialog(null,"La operación no pudo completarse.","Advertencia",
+                    JOptionPane.WARNING_MESSAGE
+                );
+            }
         }
-        return this.ok;
+        return ok;
     }
-
-    /**
-     * Verifica si un identificador ya existe en la lista.
-     * @param id El identificador a buscar.
-     * @return true si ya existe, false si no.
-     */
-    private boolean idExist(int id) {
-        return findItem(id) != null;
-    }
-
+    
     /**
      * Busca un objeto específico en la torre dado su Id.
      * @param id El identificador que se buca.
@@ -313,104 +286,298 @@ public class Tower{
      * Reorganiza visualmente la torre.
      */
     private void refreshTower() {
+        int center = width / 2;
+        int currentTop = FLOOR_Y;
 
-        int center = this.width / 2; //centro del canvas
-        StackItem anterior = null;
-        int maxHigh = 600;
-        
-        for (StackItem item : items) {
+        for (int i = 0; i < items.size(); i++) {
+            StackItem item = items.get(i);
             item.makeInvisible();
-            item.setPartnerId(-1);
-            
-            int newY = calculateY(item, anterior, maxHigh);
+            item.clearPartner();
+
+            int newY = item.calculateY(items, i, currentTop, FLOOR_Y);
             item.move(center, newY);
-            
-            int objectTop;
-            if (item instanceof Lid){
-                objectTop = newY - 30;
-            } else{
-                objectTop = newY - (item.getSize()* 30);
-            }
-            if (objectTop < maxHigh){
-                maxHigh = objectTop;
-            }
-            
-            item.makeVisible();
-            anterior = item;
+            currentTop = Math.min(currentTop, item.getTop());
         }
-        this.topPixel = maxHigh;
+
+        topPixel = currentTop;
         updatePartnerships();
-    }
-    
-    /**
-     * Calcula la coordenada "Y" para un objeto basándose en el anterior.
-     * @param actual El nuevo objeto anadido a la torre.
-     * @param anterior El último objeto anadido a la torre.
-     * @return calculo de la altura (si cabe dentro del último objeto  o se ubica sobre él).
-     */
-    private int calculateY(StackItem actual, StackItem anterior, int maxHigh) {
-        StackItem contenedorReal = null;
-        int maxHighInterno = 600;
-        int idxActual = items.indexOf(actual);
-        if (anterior == null){ return  600; } 
-        // For anidado complementado con inteligencia artificial **********************************************
-        // Buscamos hacia atrás la taza donde este objeto quepa físicamente
-        for (int i = idxActual - 1; i >= 0; i--) {
-            StackItem busqueda = items.get(i);
-            
-            if (actual instanceof Lid && busqueda instanceof Cup && actual.getSize() == busqueda.getSize()) {
-                return busqueda.getY() - (busqueda.getSize() * 30);
+
+        if (visible) {
+            for (StackItem item : items) {
+                item.makeVisible();
             }
-            if (busqueda instanceof Cup && actual.getSize() <= (busqueda.getSize() - 2)) {
-                contenedorReal = busqueda;
-                // El "suelo" inicial es el fondo de esta taza
-                maxHighInterno = busqueda.getY() - 30; 
-                
-                // 2. PUNTO DE CAMBIO: Solo sumamos si el objeto 'j' está DENTRO del contenedor 'i'
-                for (int j = i + 1; j < idxActual; j++) {
-                    StackItem interno = items.get(j);
-                    int topeInterno = interno.getY() - ((interno instanceof Lid) ? 30 : interno.getSize() * 30);
-                    // Si el objeto interno está más arriba que nuestro suelo actual, actualizamos
-                    if (topeInterno < maxHighInterno) {
-                        maxHighInterno = topeInterno;
-                    }
-                }
-                break; 
-            }
-        } // fin de ayuda con IA
-        
-        // Si encontramos un contenedor (taza), se apila en su fondo sumando lo que ya hay
-        if (contenedorReal != null) {
-            return maxHighInterno;
         }
-    
-        // Si es una tapa que sella la taza anterior (tamaños iguales)
-        if (anterior instanceof Cup && actual instanceof Lid && actual.getSize() == anterior.getSize()) {
-            return anterior.getY() - (anterior.getSize() * 30);
-        }
-    
-        // Si no cabe en nada ni sella, se apoya en la cima de la torre
-        return maxHigh; 
     }
     
     /**
      * Analiza la torre buscando piezas que deban unificarse.
      */
     private void updatePartnerships() {
-        for (StackItem lid : items) {
-            if (lid instanceof Lid && lid.getPartnerId() == -1) {
-                for (StackItem cup : items) {
-                    // Buscamos una taza libre del mismo tamaño que esté justo debajo
-                    if (cup instanceof Cup && cup.getPartnerId() == -1 && lid.getSize() == cup.getSize()) {
-                        int rimY = cup.getY() - (cup.getSize() * 30);
-                        if (lid.getY() == rimY) {
-                            lid.setPartnerId(cup.getId());
-                            cup.setPartnerId(lid.getId());
-                            break; 
-                        }
-                    }
+        for (StackItem item : items) {
+            if (!item.hasPartner()) {
+                StackItem partner = item.findPartner(items);
+                if (partner != null && !partner.hasPartner()) {
+                    item.setPartnerId(partner.getId());
+                    partner.setPartnerId(item.getId());
                 }
             }
+        }
+    }
+    
+    /**
+     * Verifica si el item recibido puede ser agregado.
+     *
+     * @param candidate item que se desea agregar.
+     * @return true si se puede agregar.
+     */
+    private boolean canAdd(StackItem candidate) {
+        return isValidNumber(candidate.getSize()) && !existsConflict(candidate);
+    }
+
+    /**
+     * Indica si un número es válido para el problema.
+     *
+     * @param size número a validar.
+     * @return true si es un número impar positivo.
+     */
+    private boolean isValidNumber(int size) {
+        return size > 0 && size % 2 != 0;
+    }
+
+    /**
+     * Verifica si ya existe un item del mismo tipo y tamaño.
+     *
+     * @param candidate item a validar.
+     * @return true si ya existe un conflicto del mismo tipo y tamaño.
+     */
+    private boolean existsConflict(StackItem candidate) {
+        for (StackItem item : items) {
+            if (item.conflictsWith(candidate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Busca el color que debe usar una tapa según la taza del mismo tamaño.
+     * @param size tamaño de la tapa.
+     * @return color que debe usar la tapa.
+     */
+    private String findColorForLid(int size) {
+        for (int i = items.size() - 1; i >= 0; i--) {
+            StackItem item = items.get(i);
+            if (item.isCup() && item.getSize() == size) {
+                return item.getColor();
+            }
+        }
+        return DEFAULT_LID_COLOR;
+    }
+
+    /**
+     * Elimina un item y su pareja, si existe.
+     * @param item item a eliminar.
+     */
+    private void removeItemAndPartner(StackItem item) {
+        int partnerId = item.getPartnerId();
+        item.makeInvisible();
+        items.remove(item);
+
+        if (partnerId != StackItem.NO_PARTNER) {
+            StackItem partner = findItem(partnerId);
+            if (partner != null) {
+                partner.makeInvisible();
+                items.remove(partner);
+            }
+        }
+    }
+
+    /**
+     * Construye los bloques de movimiento de la torre.
+     * Una taza y su tapa sellada se tratan como un solo bloque.
+     * @return bloques de movimiento en el orden actual.
+     */
+    private ArrayList<ArrayList<StackItem>> buildMoveGroups() {
+        ArrayList<ArrayList<StackItem>> groups = new ArrayList<>();
+        Set<Integer> processedIds = new HashSet<>();
+
+        for (StackItem item : items) {
+            if (processedIds.contains(item.getId())) {
+                continue;
+            }
+
+            ArrayList<StackItem> group = buildGroupFor(item, processedIds);
+            groups.add(group);
+        }
+
+        return groups;
+    }
+
+    /**
+     * Construye el bloque de movimiento de un item específico.
+     *
+     * @param item item base del bloque.
+     * @param processedIds ids ya incluidos en otros bloques.
+     * @return bloque de movimiento asociado al item.
+     */
+    private ArrayList<StackItem> buildGroupFor(StackItem item, Set<Integer> processedIds) {
+        ArrayList<StackItem> group = new ArrayList<>();
+        StackItem cup = getGroupedCup(item);
+        StackItem lid = getGroupedLid(item);
+
+        if (cup != null && lid != null) {
+            group.add(cup);
+            group.add(lid);
+            processedIds.add(cup.getId());
+            processedIds.add(lid.getId());
+            return group;
+        }
+
+        group.add(item);
+        processedIds.add(item.getId());
+        return group;
+    }
+
+    /**
+     * Retorna la taza que debe liderar un bloque taza-tapa.
+     * @param item item de referencia.
+     * @return taza del bloque o null si no existe un bloque sellado.
+     */
+    private StackItem getGroupedCup(StackItem item) {
+        if (item.isCup() && item.hasPartner()) {
+            return item;
+        }
+        if (item.isLid() && item.hasPartner()) {
+            StackItem partner = findItem(item.getPartnerId());
+            if (partner != null && partner.isCup()) {
+                return partner;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Retorna la tapa que debe cerrar un bloque taza-tapa.
+     * @param item item de referencia.
+     * @return tapa del bloque o null si no existe un bloque sellado.
+     */
+    private StackItem getGroupedLid(StackItem item) {
+        if (item.isLid() && item.hasPartner()) {
+            return item;
+        }
+        if (item.isCup() && item.hasPartner()) {
+            StackItem partner = findItem(item.getPartnerId());
+            if (partner != null && partner.isLid()) {
+                return partner;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Reorganiza la torre a partir de los bloques recibidos,
+     * conservando únicamente los que caben en la torre.
+     * @param groups bloques objetivo en el nuevo orden.
+     */
+    private void reorganizeGroups(ArrayList<ArrayList<StackItem>> groups) {
+        hideAllItems();
+        ArrayList<StackItem> keptItems = keepOnlyGroupsThatFit(groups);
+        items.clear();
+        items.addAll(keptItems);
+        refreshTower();
+        ok = true;
+    }
+
+    /**
+     * Conserva únicamente los bloques que caben dentro del ancho y la altura.
+     * @param groups bloques a evaluar.
+     * @return items que finalmente quedan en la torre.
+     */
+    private ArrayList<StackItem> keepOnlyGroupsThatFit(ArrayList<ArrayList<StackItem>> groups) {
+        ArrayList<StackItem> keptItems = new ArrayList<>();
+
+        for (ArrayList<StackItem> group : groups) {
+            ArrayList<StackItem> candidate = new ArrayList<>(keptItems);
+            candidate.addAll(group);
+
+            if (fitsInTower(candidate)) {
+                keptItems = candidate;
+            }
+        }
+
+        return keptItems;
+    }
+
+    /**
+     * Verifica si una disposición dada cabe en la torre declarada.
+     * @param arrangement disposición a validar.
+     * @return true si todos los elementos caben en ancho y altura.
+     */
+    private boolean fitsInTower(ArrayList<StackItem> arrangement) {
+        if (!fitsWidth(arrangement)) {
+            return false;
+        }
+
+        int center = width / 2;
+        int currentTop = FLOOR_Y;
+
+        for (int i = 0; i < arrangement.size(); i++) {
+            StackItem item = arrangement.get(i);
+            int newY = item.calculateY(arrangement, i, currentTop, FLOOR_Y);
+            item.move(center, newY);
+            currentTop = Math.min(currentTop, item.getTop());
+        }
+
+        return getHeightForTop(currentTop) <= maxHeight;
+    }
+
+    /**
+     * Verifica si los elementos caben horizontalmente.
+     * @param arrangement disposición a validar.
+     * @return true si cada elemento cabe dentro del ancho declarado.
+     */
+    private boolean fitsWidth(ArrayList<StackItem> arrangement) {
+        for (StackItem item : arrangement) {
+            if ((item.getSize() * StackItem.UNIT) > width) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Calcula la altura lógica a partir del punto más alto de la torre.
+     * @param top punto más alto de la disposición.
+     * @return altura lógica resultante.
+     */
+    private int getHeightForTop(int top) {
+        return (FLOOR_Y - top) / StackItem.UNIT;
+    }
+
+    /**
+     * Retorna el tamaño principal de un bloque.
+     * @param group bloque a consultar.
+     * @return tamaño principal del bloque.
+     */
+    private int getGroupSize(ArrayList<StackItem> group) {
+        return group.get(0).getSize();
+    }
+
+    /**
+     * Retorna la prioridad principal de un bloque.
+     * @param group bloque a consultar.
+     * @return prioridad principal del bloque.
+     */
+    private int getGroupPriority(ArrayList<StackItem> group) {
+        return group.get(0).getOrderPriority();
+    }
+
+    /**
+     * Hace invisibles todos los elementos sin cambiar el estado lógico de visibilidad.
+     */
+    private void hideAllItems() {
+        for (StackItem item : items) {
+            item.makeInvisible();
         }
     }
 } 
