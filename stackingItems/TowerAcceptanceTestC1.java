@@ -1,9 +1,8 @@
-public class TowerAceptanceTest {
+public class TowerAcceptanceTestC1 {
 
     public static void main(String[] args) {
         Tower tower = new Tower(800, 20);
 
-        pause(1000);
         tower.makeVisible();
         logState("Torre vacía", tower);
 
@@ -42,30 +41,10 @@ public class TowerAceptanceTest {
         pause(1000);
         tower.popCup();
         logState("Después de popCup()", tower);
-
-        pause(1000);
-        Tower cycle2Tower = new Tower(800, 20);
-        cycle2Tower.makeVisible();
-        logState("Nueva torre para ciclo 2", cycle2Tower);
         
         pause(1000);
-        cycle2Tower.pushLid(3);
-        cycle2Tower.pushCup(5);
-        cycle2Tower.pushLid(5);
-        cycle2Tower.pushCup(3);
-        logState("Antes de cover()", cycle2Tower);
-        
-        pause(1000);
-        cycle2Tower.cover();
-        logState("Después de cover()", cycle2Tower);
-        
-        pause(1000);
-        String[][] suggestion = cycle2Tower.swapToReduce();
-        logSwapSuggestion(suggestion);
-        
-        pause(5000);
     }
-
+    // visualización textual generada con inteligencia artificial
     private static void logState(String title, Tower tower) {
         System.out.println("====================================");
         System.out.println(title);

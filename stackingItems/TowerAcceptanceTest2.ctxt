@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=TowerAcceptanceTest2
+comment1.params=args
+comment1.target=void\ main(java.lang.String[])
+comment2.params=title\ tower
+comment2.target=void\ logState(java.lang.String,\ Tower)
+comment3.params=suggestion
+comment3.target=void\ logSwapSuggestion(java.lang.String[][])
+comment4.params=milliseconds
+comment4.target=void\ pause(int)
+numComments=5
