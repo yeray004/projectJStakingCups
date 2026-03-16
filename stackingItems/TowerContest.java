@@ -24,7 +24,7 @@ public class TowerContest {
             return "impossible";
         }
 
-        return;
+        return buildHeightsString(order);
     }
 
     /**
