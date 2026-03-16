@@ -1,4 +1,4 @@
-public class TowerAcceptanceTest2 {
+public class TowerAcceptanceTest2C2 {
 
     public static void main(String[] args) {
         Tower tower = new Tower(800, 20);

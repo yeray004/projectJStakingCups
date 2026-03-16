@@ -140,6 +140,4 @@ public class Cup extends StackItem{
     public int getSize() {
         return size;
     }
-    
-    //CICLO 2
 }

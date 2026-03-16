@@ -212,6 +212,7 @@ public class Tower{
     
         if (firstItem == null || secondItem == null || firstItem == secondItem) {
             ok = false;
+            return;
         }
     
         int firstIndex = items.indexOf(firstItem);
