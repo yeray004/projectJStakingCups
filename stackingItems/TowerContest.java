@@ -1,5 +1,4 @@
 import java.util.*;
-
 /**
  * Clase encargada de resolver el problema de la maratón y simular la solución.
  * Tower no se usa para resolver, solo para simular.
@@ -7,7 +6,7 @@ import java.util.*;
  * @author Andrés Sotelo
  * @author Yeray Guachetá
  * @support Assisted by Gemini (Google AI) - March 2026
- * @version 1.0
+ * @version 2.0
  */
 public class TowerContest {
 
@@ -19,12 +18,8 @@ public class TowerContest {
      */
     public String solve(int n, int h) {
         ArrayList<Integer> order = buildOrder(n, h);
-
-        if (order == null) {
-            return "impossible";
-        }
-
-        return buildHeightsString(order);
+        String response = (order == null) ? "impossible" : buildHeightsString(order);
+        return response;
     }
 
     /**
@@ -33,6 +28,11 @@ public class TowerContest {
      * @param h altura deseada.
      */
     public void simulate(int n, int h) {
+        if (n > 20) {
+            System.out.println("Simulación visual omitida: 'n' es demasiado grande para la vista.");
+            return;
+        }
+
         String solution = solve(n, h);
 
         if (solution.equals("impossible")) {
@@ -49,167 +49,69 @@ public class TowerContest {
         }
     }
     
-    /**
-     * Construye recursivamente un orden válido de tazas para alcanzar la altura h.
-     * Si no existe, retorna null.
-     * @param n número de tazas disponibles.
-     * @param h altura deseada.
-     * @return lista con el orden de los números de taza o null si no existe solución.
-     */
-    // Metodo elaborado con apoyo de inteligencia artificial.
-    private ArrayList<Integer> buildOrder(int n, int h) {
-        if (!isReachable(n, h)) {return null;}
-
-        if (n == 1) {
-            ArrayList<Integer> single = new ArrayList<>();
-            single.add(1);
-            return single;
-        }
-
-        int minHeight = getMinHeight(n);
-        if (h == minHeight) {return buildDescendingNumbers(n);}
-        
-        if (canPlaceLargestFirst(n, h)) {
-            ArrayList<Integer> suffix = buildOrder(n - 1, h - 1);
-            if (suffix != null) {
-                ArrayList<Integer> result = new ArrayList<>();
-                result.add(n);
-                result.addAll(suffix);
-                return result;
-            }
-        }
-
-        int targetBeforeLargest = h - minHeight;
-        int k = chooseCupCount(targetBeforeLargest, n);
-        if (k == -1) { return null;}
-
-        ArrayList<Integer> prefix;
-        if (k == 0) {
-            prefix = new ArrayList<>();
-        } else {
-            prefix = buildOrder(k, targetBeforeLargest);
-        }
-
-        if (prefix == null) {
+    private ArrayList<Integer> buildOrder(int n, long h) {
+        if (h < getMinHeight(n) || h > getMaxHeight(n)) {
             return null;
         }
 
-        ArrayList<Integer> result = new ArrayList<>(prefix);
-        result.add(n);
-        for (int i = n - 1; i > k; i--) {
-            result.add(i);
+        ArrayList<Integer> order = new ArrayList<>();
+        boolean[] used = new boolean[n + 1];
+        long[] bottoms = new long[n + 1]; // Guarda la posición Y del piso de cada taza
+        
+        if (solveBacktrack(n, h, order, used, bottoms, 0)) {
+            return order;
         }
-        return result;
-    }
-    
-    /**
-     * Indica si la altura h es alcanzable con n tazas.
-     * @param n número de tazas.
-     * @param h altura objetivo.
-     * @return true si la altura se puede construir.
-     */
-    private boolean isReachable(int n, int h) {
-        if (n < 1) {
-            return false;
-        }
-
-        int minHeight = getMinHeight(n);
-        int maxHeight = getMaxHeight(n);
-        boolean res = h >= minHeight && h <= maxHeight && h != maxHeight - 2;
-        return res;
-    }
-    
-    /**
-     * Determina si conviene ubicar primero la taza más grande.
-     * @param n número de tazas.
-     * @param h altura deseada.
-     * @return true si se puede seguir el caso recursivo con la taza mayor al inicio.
-     */
-    private boolean canPlaceLargestFirst(int n, int h) {
-        int upperBound = getMaxHeight(n - 1) + 1;
-        int forbiddenValue = getMaxHeight(n - 1) - 1;
-        boolean res = h <= upperBound && h != forbiddenValue; 
-        return res;
-    }
-    
-    /**
-     * Escoge cuántas tazas pequeñas deben ir antes de la taza mayor.
-     * @param target altura que debe lograrse antes de ubicar la taza más grande.
-     * @param limit número máximo de tazas disponibles.
-     * @return cantidad k de tazas a usar o -1 si no existe una elección válida.
-     */
-    private int chooseCupCount(int target, int limit) {
-        if (target == 0) {
-            return 0;
-        }
-
-        int k = (int) Math.sqrt(target);
-        if (k * k < target) {
-            k++;
-        }
-
-        if ((k * k) - 2 == target) {
-            k++;
-        }
-
-        if (k >= limit) {
-            return -1;
-        }
-
-        if (target < getMinHeight(k) || target > getMaxHeight(k)) {
-            return -1;
-        }
-
-        return k;
-    }
-    
-    /**
-     * Indica si la cantidad de tazas es válida.
-     * @param n número de tazas.
-     * @return true si n es válido.
-     */
-    private boolean isValidCupCount(int n) {
-        return n >= 1;
+        return null;
     }
 
-    /**
-     * Calcula la altura mínima posible usando n tazas.
-     * @param n número de tazas.
-     * @return altura mínima.
-     */
-    private int getMinHeight(int n) {
-        if (n == 0) {
-            return 0;
+    private boolean solveBacktrack(int n, long targetH, ArrayList<Integer> order, boolean[] used, long[] bottoms, long currentMaxPeak) {
+        if (order.size() == n) {
+            return currentMaxPeak == targetH;
         }
-        return (2 * n) - 1;
-    }
-
-    /**
-     * Calcula la altura máxima posible con n tazas.
-     * @param n número de tazas.
-     * @return altura máxima posible.
-     */
-    private int getMaxHeight(int n) {
-        if (n == 0) {
-            return 0;
-        }
-        return n * n;
-    }
-
-    /**
-     * Construye los números de taza en orden descendente.
-     * @param n número de tazas.
-     * @return lista descendente desde n hasta 1.
-     */
-    private ArrayList<Integer> buildDescendingNumbers(int n) {
-        ArrayList<Integer> result = new ArrayList<>();
-
         for (int i = n; i >= 1; i--) {
-            result.add(i);
-        }
+            if (!used[i]) {
+                // Calcular dónde aterriza la taza evaluando colisión con TODAS las puestas
+                long nextFloor = 0;
+                for (int j : order) {
+                    long restingPoint;
+                    if (i < j) {
+                        restingPoint = bottoms[j] + 1; // Cae adentro, aterriza en su base
+                    } else {
+                        restingPoint = bottoms[j] + (2L * j - 1); // No cabe, choca con la cima
+                    }
+                    if (restingPoint > nextFloor) {
+                        nextFloor = restingPoint;
+                    }
+                }
 
-        return result;
+                bottoms[i] = nextFloor;
+                long nextPeak = Math.max(currentMaxPeak, nextFloor + (2L * i - 1));
+                // Podar y explorar
+                if (nextPeak <= targetH) {
+                    used[i] = true;
+                    order.add(i);
+                    
+                    if (solveBacktrack(n, targetH, order, used, bottoms, nextPeak)) {
+                        return true;
+                    }
+                    
+                    order.remove(order.size() - 1);
+                    used[i] = false;
+                }   
+            }
+        }
+        return false;
     }
+
+    private long getMinHeight(int n) {
+        if (n <= 0) return 0;
+        return (2L * n) - 1;
+    }
+
+    private long getMaxHeight(int n) {
+        if (n <= 0) return 0;
+        return (long) n * n;
+    }   
     
     /**
      * Convierte una lista de números de taza al string de alturas que exige el problema.

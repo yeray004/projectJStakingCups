@@ -10,7 +10,6 @@
 public class Cup extends StackItem{
     private static final int ORDER_PRIORITY = 0;
     private static final String TYPE_NAME = "cup";
-
     private final int size;
     
     /**
@@ -64,9 +63,7 @@ public class Cup extends StackItem{
      * @return true si el otro elemento cabe dentro de esta taza.
      */
     @Override
-    public boolean canContain(StackItem other) {
-        return other.canBeContainedBy(this);
-    }
+    public boolean canContain(StackItem other) {return other.canBeContainedBy(this);}
 
     /**
      * Indica si esta taza puede ser sellada por una tapa.
@@ -74,70 +71,54 @@ public class Cup extends StackItem{
      * @return true si la tapa la puede sellar.
      */
     @Override
-    public boolean canBeSealedBy(Lid lid) {
-        return size == lid.getSize();
-    }
+    public boolean canBeSealedBy(StackItem lid) {return size == lid.getSize();}
 
     /**
      * Indica si esta taza está tapada.
      * @return true si la taza tiene una pareja asociada.
      */
     @Override
-    public boolean isSealedCup() {
-        return hasPartner();
-    }
+    public boolean isSealedCup() {return hasPartner();}
 
     /**
      * Indica si el item corresponde al tipo taza.
      * @return true siempre para una taza.
      */
     @Override
-    public boolean isCup() {
-        return true;
-    }
+    public boolean isCup() {return true;}
 
     /**
      * Devuelve la prioridad usada al ordenar elementos del mismo tamaño.
      * @return prioridad de orden de la taza.
      */
     @Override
-    public int getOrderPriority() {
-        return ORDER_PRIORITY;
-    }
+    public int getOrderPriority() {return ORDER_PRIORITY;}
 
     /**
      * Devuelve el tipo del elemento.
      * @return tipo cup.
      */
     @Override
-    public String getTypeName() {
-        return TYPE_NAME;
-    }
+    public String getTypeName() {return TYPE_NAME;}
 
     /**
      * Devuelve la altura lógica del objeto en unidades.
      * @return altura lógica de la taza.
      */
     @Override
-    public int getHeightUnits() {
-        return size;
-    }
+    public int getHeightUnits() {return size;}
 
     /**
      * Regresa el piso interno de la taza.
      * @return coordenada Y del piso interno.
      */
     @Override
-    public int getInnerFloorY() {
-        return getY() - UNIT;
-    }
+    public int getInnerFloorY() {return getY() - UNIT;}
 
     /**
      * Regresa el tamaño de la taza.
      * @return tamaño de la taza.
      */
     @Override
-    public int getSize() {
-        return size;
-    }
+    public int getSize() {return size;}
 }

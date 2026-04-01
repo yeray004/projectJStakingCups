@@ -39,9 +39,7 @@ public class Lid extends StackItem {
      * @return true si el otro elemento puede ser sellado por esta tapa.
      */
     @Override
-    public boolean canSeal(StackItem other) {
-        return other.canBeSealedBy(this);
-    }
+    public boolean canSeal(StackItem other) {return other.canBeSealedBy(this);}
 
     /**
      * Busca la taza que esta tapa está sellando.
@@ -63,43 +61,33 @@ public class Lid extends StackItem {
      * @return true siempre para una tapa.
      */
     @Override
-    public boolean isLid() {
-        return true;
-    }
+    public boolean isLid() {return true;}
 
     /**
      * Devuelve la prioridad usada al ordenar elementos del mismo tamaño.
      * @return prioridad de orden de la tapa.
      */
     @Override
-    public int getOrderPriority() {
-        return ORDER_PRIORITY;
-    }
+    public int getOrderPriority() {return ORDER_PRIORITY;}
 
     /**
      * Devuelve el tipo del elemento.
      * @return tipo lid.
      */
     @Override
-    public String getTypeName() {
-        return TYPE_NAME;
-    }
+    public String getTypeName() {return TYPE_NAME;}
 
     /**
      * Devuelve la altura lógica del objeto en unidades.
      * @return altura lógica de la tapa.
      */
     @Override
-    public int getHeightUnits() {
-        return HEIGHT_UNITS;
-    }
+    public int getHeightUnits() {return HEIGHT_UNITS;}
 
     /**
      * Regresa el tamaño de la tapa.
      * @return tamaño de la tapa.
      */
     @Override
-    public int getSize() {
-        return size;
-    }
+    public int getSize() {return size;}
 }

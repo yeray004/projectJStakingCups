@@ -17,11 +17,11 @@ public class Tower{
     private ArrayList<StackItem> items;
     private int width;
     private int maxHeight;
-    private boolean ok;
-    private boolean visible;
     private int idCounter;
     private int topPixel;
     private int colorIndex;
+    private boolean ok;
+    private boolean visible;
     
     /**
      * Constructor general de la clase Tower.
@@ -350,7 +350,7 @@ public class Tower{
      * Hace visibles todos los elementos de la torre.
      */
     public void makeVisible(){
-        hideAllItems();
+        makeInvisible();
 
         if (!fitsInTower(new ArrayList<>(items))) {
             visible = false;
@@ -367,9 +367,9 @@ public class Tower{
      * Hace invisibles todos los elementos de la torre.
      */
     public void makeInvisible(){
-        hideAllItems();
-        visible = false;
-        ok = true;
+        for (StackItem item : items) {
+            item.makeInvisible();
+        }
     }
     
     /**
@@ -647,7 +647,7 @@ public class Tower{
      * @param groups bloques objetivo en el nuevo orden.
      */
     private void reorganizeGroups(ArrayList<ArrayList<StackItem>> groups) {
-        hideAllItems();
+        makeInvisible();
         ArrayList<StackItem> keptItems = keepOnlyGroupsThatFit(groups);
         items.clear();
         items.addAll(keptItems);
@@ -737,15 +737,6 @@ public class Tower{
      */
     private int getGroupPriority(ArrayList<StackItem> group) {
         return group.get(0).getOrderPriority();
-    }
-
-    /**
-     * Hace invisibles todos los elementos sin cambiar el estado lógico de visibilidad.
-     */
-    private void hideAllItems() {
-        for (StackItem item : items) {
-            item.makeInvisible();
-        }
     }
     // Ciclo 2
     /**

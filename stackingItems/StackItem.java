@@ -39,8 +39,8 @@ public abstract class StackItem{
      * Mueve el objeto a una nueva posición.
      */
     public void move(int newX, int newY){
-        int deltaX = newX - this.x;
-        int deltaY = newY - this.y;
+        int deltaX = newX - x;
+        int deltaY = newY - y;
         for (Rectangle s: shapes){
             s.moveHorizontal(deltaX);
             s.moveVertical(deltaY);
@@ -143,34 +143,28 @@ public abstract class StackItem{
      * @param items elementos de la torre.
      * @return pareja encontrada o null si no existe.
      */
-    public StackItem findPartner(List<StackItem> items) {
-        return null;
-    }
+    public StackItem findPartner(List<StackItem> items) { return null; }
 
     /**
      * Indica si este objeto puede contener a otro.
      * @param other elemento candidato a quedar dentro.
      * @return true si puede contenerlo.
      */
-    public boolean canContain(StackItem other) {
-        return false;
-    }
+    public boolean canContain(StackItem other) { return false; }
 
     /**
      * Indica si este objeto puede sellar a otro.
      * @param other elemento candidato a quedar tapado.
      * @return true si puede sellarlo.
      */
-    public boolean canSeal(StackItem other) {
-        return false;
-    }
+    public boolean canSeal(StackItem other) { return false; }
 
     /**
      * Indica si este objeto cabe dentro de una taza dada.
      * @param cup taza contenedora.
      * @return true si cabe dentro de la taza.
      */
-    public boolean canBeContainedBy(Cup cup) {
+    public boolean canBeContainedBy(StackItem cup) {
         return getSize() <= cup.getSize() - 2;
     }
 
@@ -179,33 +173,25 @@ public abstract class StackItem{
      * @param lid tapa candidata.
      * @return true si puede ser sellado.
      */
-    public boolean canBeSealedBy(Lid lid) {
-        return false;
-    }
+    public boolean canBeSealedBy(StackItem lid) { return false; }
 
     /**
      * Indica si este item representa una taza tapada.
      * @return true si representa una taza sellada.
      */
-    public boolean isSealedCup() {
-        return false;
-    }
+    public boolean isSealedCup() { return false; }
 
     /**
      * Indica si el item corresponde al tipo taza.
      * @return true si es una taza.
      */
-    public boolean isCup() {
-        return false;
-    }
+    public boolean isCup() { return false; }
 
     /**
      * Indica si el item corresponde al tipo tapa.
      * @return true si es una tapa.
      */
-    public boolean isLid() {
-        return false;
-    }
+    public boolean isLid() { return false; }
 
     /**
      * Indica si este item y el recibido corresponden al mismo tipo lógico.
@@ -255,25 +241,19 @@ public abstract class StackItem{
      * Regresa el identificador del objeto.
      * @return identificador del objeto.
      */
-    public int getId() {
-        return id;
-    }
+    public int getId() {return id;}
 
     /**
      * Regresa la coordenada Y del objeto.
      * @return posición Y actual.
      */
-    public int getY() {
-        return y;
-    }
+    public int getY() {return y;}
 
     /**
      * Regresa el color del objeto.
      * @return color del objeto.
      */
-    public String getColor() {
-        return color;
-    }
+    public String getColor() {return color;}
 
     /**
      * Regresa la coordenada superior del objeto.
@@ -287,56 +267,42 @@ public abstract class StackItem{
      * Regresa la coordenada donde una tapa debe ubicarse para sellar este objeto.
      * @return coordenada Y de sellado.
      */
-    public int getSealY() {
-        return getTop();
-    }
+    public int getSealY() {return getTop();}
 
     /**
      * Regresa el piso interior del objeto para ubicar elementos contenidos.
      * @return coordenada Y del piso interior.
      */
-    public int getInnerFloorY() {
-        return y;
-    }
+    public int getInnerFloorY() {return y;} //reescrito dependiendo el objeto por polimorfismo.
     
     /**
      * Retorna el número de la figura.
      * @return número del objeto.
      */
-    public int getNumber() {
-        return NUMBER;
-    }
+    public int getNumber() {return NUMBER;}
 
     /**
      * Actualiza el identificador de la pareja del objeto.
      * @param id identificador de la pareja.
      */
-    public void setPartnerId(int id) {
-        partnerId = id;
-    }
+    public void setPartnerId(int id) {partnerId = id;}
 
     /**
      * Limpia la pareja actual del objeto.
      */
-    public void clearPartner() {
-        partnerId = NO_PARTNER;
-    }
+    public void clearPartner() {partnerId = NO_PARTNER;}
 
     /**
      * Indica si el objeto tiene pareja.
      * @return true si tiene pareja.
      */
-    public boolean hasPartner() {
-        return partnerId != NO_PARTNER;
-    }
+    public boolean hasPartner() {return partnerId != NO_PARTNER;}
 
     /**
      * Regresa el identificador de la pareja del objeto.
      * @return id de la pareja o NO_PARTNER.
      */
-    public int getPartnerId() {
-        return partnerId;
-    }
+    public int getPartnerId() {return partnerId;}
     
     //CICLO 2
     /**

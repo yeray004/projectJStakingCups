@@ -9,8 +9,11 @@ public class TowerAcceptanceTest2C2 {
 
         pause(1000);
         tower.pushLid(3);
+        pause(500);
         tower.pushCup(5);
+        pause(500);
         tower.pushLid(5);
+        pause(500);
         tower.pushCup(3);
         logState("Antes de cover()", tower);
 
@@ -22,7 +25,7 @@ public class TowerAcceptanceTest2C2 {
         String[][] suggestion = tower.swapToReduce();
         logSwapSuggestion(suggestion);
 
-        pause(5000);
+        pause(2000);
     }
     // visualización textual generada con inteligencia artificial
     private static void logState(String title, Tower tower) {
