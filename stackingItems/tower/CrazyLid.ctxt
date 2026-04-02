@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=CrazyLid
+comment0.text=\r\n\ A\ lid\ that\ never\ seals.\ It\ acts\ as\ a\ base\ by\ sliding\ under\ and\ pushing\ up\ any\ cup\ it\ lands\ on.\r\n\ \r\n\ @author\ Yeray\ Guachet\u00E1\r\n\ @version\ 1.2\r\n
+comment1.params=id\ number\ color\ x\ y\ size
+comment1.target=CrazyLid(int,\ int,\ java.lang.String,\ int,\ int,\ int)
+comment2.params=items\ index\ towerTop\ floorY
+comment2.target=int\ calculateY(java.util.List,\ int,\ int,\ int)
+comment3.params=
+comment3.target=java.lang.String\ getTypeName()
+comment4.params=other
+comment4.target=boolean\ canSeal(StackItem)
+numComments=5

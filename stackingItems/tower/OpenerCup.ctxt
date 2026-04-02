@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=OpenerCup
+comment0.text=\r\n\ A\ cup\ that\ destroys\ any\ strictly\ smaller\ items\ in\ its\ falling\ path\ until\ it\ finds\ a\ valid\ base.\r\n\ \r\n\ @author\ Yeray\ Guachet\u00E1\r\n\ @version\ 1.3\r\n
+comment1.params=id\ number\ color\ x\ y\ size
+comment1.target=OpenerCup(int,\ int,\ java.lang.String,\ int,\ int,\ int)
+comment2.params=items\ index\ towerTop\ floorY
+comment2.target=int\ calculateY(java.util.List,\ int,\ int,\ int)
+comment3.params=
+comment3.target=java.lang.String\ getTypeName()
+numComments=4

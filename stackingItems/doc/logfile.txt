@@ -20,12 +20,114 @@ C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingC
 UTF-8
 -charset
 UTF-8
-C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingCups\stackingItems\TowerContest.java
+C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingCups\stackingItems\tests\TowerATest.java
 <---- end of javadoc command ---->
-Loading source file C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingCups\stackingItems\TowerContest.java...
+Loading source file C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingCups\stackingItems\tests\TowerATest.java...
 Constructing Javadoc information...
 Standard Doclet version 21.0.6+7-LTS
 Building tree for all the packages and classes...
-Generating C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingCups\stackingItems\doc\TowerContest.html...
-Generating C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingCups\stackingItems\doc\package-summary.html...
+Generating C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingCups\stackingItems\doc\tests\TowerATest.html...
+Generating C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingCups\stackingItems\doc\tests\package-summary.html...
+warning: unknown enum constant Status.STABLE
+  reason: class file for org.apiguardian.api.API$Status not found
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
+warning: unknown enum constant Status.STABLE
 Generating C:\Users\ASUS - PC\Documents\Universidad\3semestre\DOPO\tercio1\projectJStakingCups\stackingItems\doc\index.html...
+100 warnings

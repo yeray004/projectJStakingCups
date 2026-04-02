@@ -1,9 +1,0 @@
-#BlueJ class context
-comment0.target=TowerContestAcceptanceTest
-comment1.params=args
-comment1.target=void\ main(java.lang.String[])
-comment2.params=contest\ n\ h
-comment2.target=void\ testSolve(TowerContest,\ int,\ int)
-comment3.params=milliseconds
-comment3.target=void\ pause(int)
-numComments=4

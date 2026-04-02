@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=TowerC4Test
+comment0.text=\r\n\ The\ test\ class\ TowerC4Test.\r\n\r\n\ @author\ \ Yeray\ Guachet\u00E1\r\n\ @version\ 1\r\n
+comment1.params=
+comment1.target=void\ shouldOpenerCupDestroySmallerItems()
+comment2.params=
+comment2.target=void\ shouldntOpenerCupDestroyLargerItems()
+comment3.params=
+comment3.target=void\ shouldCrazyLidNeverSeal()
+comment4.params=
+comment4.target=void\ shouldntCrazyLidSealOtherCups()
+numComments=5

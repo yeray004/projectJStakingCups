@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=TowerContestAcceptanceTest
+comment0.text=\r\n\ The\ test\ class\ TowerContestAcceptanceTest.\r\n\r\n\ @author\ \ Yeray\ Gauchet\u00E1\r\n\ @version\ 2\r\n
+comment1.params=args
+comment1.target=void\ main(java.lang.String[])
+comment2.params=contest\ n\ h
+comment2.target=void\ testSolve(tower.TowerContest,\ int,\ int)
+comment3.params=milliseconds
+comment3.target=void\ pause(int)
+numComments=4
